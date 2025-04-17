@@ -1,5 +1,6 @@
 "use client";
 import { useCallback } from "react";
+import ReactMarkdown from 'react-markdown';
 import ReactFlow, {
   Background,
   BackgroundVariant,
@@ -135,9 +136,46 @@ export default function MCPInteractiveDiagram() {
     }
   }, []);
 
+  const markdown = `
+# Model Context Protocol (MCP) Diagram
+
+This interactive diagram visualizes Anthropic's Model Context Protocol (MCP):
+
+- **Click** any node to open relevant documentation.
+- **Drag** nodes to rearrange and explore relationships.
+- **Use controls** (top-right) to zoom, fit, and toggle minimap.
+
+**External References:**
+- [Anthropic Messages API](https://docs.anthropic.com/claude/reference/messages_post)
+- [Model Context Protocol Spec](https://docs.anthropic.com/claude/docs/model-context-protocol)
+- [Tool Use & Function Calling](https://docs.anthropic.com/claude/docs/tool-use)
+- [Attachments & Images](https://docs.anthropic.com/claude/docs/images)
+- [Safety & Moderation](https://docs.anthropic.com/claude/docs/safety-overview)
+`;
+
   return (
-    <div style={{ width: '100vw', height: '100vh', boxShadow: '0 4px 24px rgba(0,0,0,0.08)' }}>
-      <div style={{ width: '100%', height: '100%' }}>
+    <div style={{ width: '100vw', height: '100vh', display: 'flex', boxShadow: '0 4px 24px rgba(0,0,0,0.08)' }}>
+      {/* Markdown Sidebar */}
+      <div
+        style={{
+          width: 380,
+          minWidth: 320,
+          maxWidth: 440,
+          height: '100%',
+          background: '#f9fafb',
+          borderRight: '1px solid #e5e7eb',
+          padding: '32px 24px',
+          overflowY: 'auto',
+          boxSizing: 'border-box',
+          fontSize: 18,
+          fontFamily: 'system-ui, sans-serif',
+          zIndex: 10,
+        }}
+      >
+        <ReactMarkdown>{markdown}</ReactMarkdown>
+      </div>
+      {/* Diagram Area */}
+      <div style={{ flex: 1, height: '100%' }}>
         <ReactFlow
           nodes={nodes}
           edges={edges}
