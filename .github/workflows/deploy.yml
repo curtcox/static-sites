@@ -16,7 +16,9 @@ permissions:
 
 jobs:
   build-and-deploy:
+
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -26,15 +28,16 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Switch to mcp-interactive-diagram directory
+        run: cd mcp-interactive-diagram
+
       - name: Install dependencies
         run: npm ci
-        working-directory: mcp-interactive-diagram
 
       - name: Build site
         run: |
           npm run build
           touch dist/.nojekyll
-        working-directory: mcp-interactive-diagram
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -42,5 +45,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-        with:
-          path: './mcp-interactive-diagram/dist'
