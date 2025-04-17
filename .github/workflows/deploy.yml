@@ -30,16 +30,33 @@ jobs:
           cache: 'npm'
           cache-dependency-path: 'mcp-interactive-diagram/package-lock.json'
 
-      - name: Switch to mcp-interactive-diagram directory
-        run: cd mcp-interactive-diagram
-
       - name: Install dependencies
-        run: npm ci
+        run: |
+          cd mcp-interactive-diagram
+          npm ci
 
       - name: Build site
         run: |
+          cd mcp-interactive-diagram
           npm run build
           touch dist/.nojekyll
+
+      - name: Save latest deployment artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mcp-interactive-diagram-web-build-latest
+          path: |
+            mcp-interactive-diagram/dist
+            mcp-interactive-diagram/public/version.json
+
+      - name: Save historical deployment artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mcp-interactive-diagram-web-build-${{ github.sha }}
+          path: |
+            mcp-interactive-diagram/dist
+            mcp-interactive-diagram/public/version.json
+          retention-days: 90
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
