@@ -29,7 +29,9 @@ jobs:
         working-directory: mcp-interactive-diagram
 
       - name: Build site
-        run: npm run build
+        run: |
+          npm run build
+          touch dist/.nojekyll
         working-directory: mcp-interactive-diagram
 
       - name: Deploy to GitHub Pages
