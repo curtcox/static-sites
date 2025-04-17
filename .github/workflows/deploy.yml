@@ -27,6 +27,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: 'mcp-interactive-diagram/package-lock.json'
 
       - name: Switch to mcp-interactive-diagram directory
         run: cd mcp-interactive-diagram
