@@ -129,7 +129,7 @@ export default function MCPInteractiveDiagram() {
   const [nodes, , onNodesChange] = useNodesState(initialNodes);
   const [edges, , onEdgesChange] = useEdgesState(initialEdges);
 
-  const onNodeClick = useCallback((node: any) => {
+  const onNodeClick = useCallback((_event: any, node: any) => {
     if (node?.data?.url) {
       window.open(node.data.url, "_blank", "noopener noreferrer");
     }
