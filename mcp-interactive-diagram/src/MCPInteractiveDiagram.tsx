@@ -1,5 +1,6 @@
 "use client";
-import { useCallback, useState } from "react";
+import React, { useCallback, useState, useRef } from "react";
+import './ResizableSidebar.css';
 import ReactMarkdown from 'react-markdown';
 import ReactFlow, {
   Background,
@@ -176,53 +177,76 @@ This interactive diagram visualizes Anthropic's Model Context Protocol (MCP):
 - [Safety & Moderation](https://docs.anthropic.com/claude/docs/safety-overview)
 `;
 
+  // Sidebar width state for resizing
+  const [sidebarWidth, setSidebarWidth] = useState(380);
+  const sidebarRef = useRef<HTMLDivElement>(null);
+
+  // Mouse event handlers for resizing
+  const onMouseDown = (e: React.MouseEvent) => {
+    e.preventDefault();
+    document.body.style.cursor = 'ew-resize';
+    // Attach listeners
+    const onMouseMove = (e: MouseEvent) => {
+      if (sidebarRef.current) {
+        const min = 220, max = 600;
+        const rect = sidebarRef.current.getBoundingClientRect();
+        // Sidebar's left edge + width = right edge
+        // Sidebar's left edge = rect.left
+        // Mouse X relative to viewport: e.clientX
+        // Sidebar width = mouse X - left edge
+        const newWidth = Math.min(max, Math.max(min, e.clientX - rect.left));
+        setSidebarWidth(newWidth);
+      }
+    };
+    const onMouseUp = () => {
+      document.body.style.cursor = '';
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseup', onMouseUp);
+    };
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', onMouseUp);
+  };
+
+
   return (
     <div style={{ width: '100vw', height: '100vh', display: 'flex', boxShadow: '0 4px 24px rgba(0,0,0,0.08)' }}>
-      {/* Markdown Sidebar */}
-      <div
-        style={{
-          width: 380,
-          minWidth: 320,
-          maxWidth: 440,
-          height: '100%',
-          background: '#f9fafb',
-          borderRight: '1px solid #e5e7eb',
-          padding: '32px 24px',
-          overflowY: 'auto',
-          boxSizing: 'border-box',
-          fontSize: 18,
-          fontFamily: 'system-ui, sans-serif',
-          zIndex: 10,
-        }}
-      >
-        {hoveredItem ? (
-          hoveredItem.type === 'node' ? (
-            <div>
-              <h2 style={{ marginTop: 0 }}>{hoveredItem.data.data?.label || hoveredItem.data.id}</h2>
-              {hoveredItem.data.data?.url && (
-                <div style={{ marginBottom: 8 }}>
-                  <a href={hoveredItem.data.data.url} target="_blank" rel="noopener noreferrer">
-                    {hoveredItem.data.data.url}
-                  </a>
-                </div>
-              )}
-              <pre style={{ background: '#f3f4f6', padding: 8, borderRadius: 8, fontSize: 15 }}>
-                {JSON.stringify(hoveredItem.data, null, 2)}
-              </pre>
-            </div>
+      {/* Resizable Markdown Sidebar */}
+      <div className="resizable-sidebar" style={{ width: sidebarWidth }} ref={sidebarRef}>
+        <div className="resizable-content">
+          {hoveredItem ? (
+            hoveredItem.type === 'node' ? (
+              <div>
+                <h2 style={{ marginTop: 0 }}>{hoveredItem.data.data?.label || hoveredItem.data.id}</h2>
+                {hoveredItem.data.data?.url && (
+                  <div style={{ marginBottom: 8 }}>
+                    <a href={hoveredItem.data.data.url} target="_blank" rel="noopener noreferrer">
+                      {hoveredItem.data.data.url}
+                    </a>
+                  </div>
+                )}
+                <pre style={{ background: '#f3f4f6', padding: 8, borderRadius: 8, fontSize: 15 }}>
+                  {JSON.stringify(hoveredItem.data, null, 2)}
+                </pre>
+              </div>
+            ) : (
+              <div>
+                <h2 style={{ marginTop: 0 }}>Edge: {hoveredItem.data.id}</h2>
+                <div>From: <b>{hoveredItem.data.source}</b> → To: <b>{hoveredItem.data.target}</b></div>
+                {hoveredItem.data.label && <div style={{ margin: '6px 0' }}>Label: <b>{hoveredItem.data.label}</b></div>}
+                <pre style={{ background: '#f3f4f6', padding: 8, borderRadius: 8, fontSize: 15 }}>
+                  {JSON.stringify(hoveredItem.data, null, 2)}
+                </pre>
+              </div>
+            )
           ) : (
-            <div>
-              <h2 style={{ marginTop: 0 }}>Edge: {hoveredItem.data.id}</h2>
-              <div>From: <b>{hoveredItem.data.source}</b> → To: <b>{hoveredItem.data.target}</b></div>
-              {hoveredItem.data.label && <div style={{ margin: '6px 0' }}>Label: <b>{hoveredItem.data.label}</b></div>}
-              <pre style={{ background: '#f3f4f6', padding: 8, borderRadius: 8, fontSize: 15 }}>
-                {JSON.stringify(hoveredItem.data, null, 2)}
-              </pre>
-            </div>
-          )
-        ) : (
-          <ReactMarkdown>{markdown}</ReactMarkdown>
-        )}
+            <ReactMarkdown>{markdown}</ReactMarkdown>
+          )}
+        </div>
+        <div
+          className="resizer"
+          onMouseDown={onMouseDown}
+          style={{ height: '100%' }}
+        />
       </div>
       {/* Diagram Area */}
       <div style={{ flex: 1, height: '100%' }}>
