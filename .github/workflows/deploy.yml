@@ -47,7 +47,6 @@ jobs:
           name: mcp-interactive-diagram-web-build-latest
           path: |
             mcp-interactive-diagram/dist
-            mcp-interactive-diagram/public/version.json
 
       - name: Save historical deployment artifact
         uses: actions/upload-artifact@v4
@@ -55,11 +54,15 @@ jobs:
           name: mcp-interactive-diagram-web-build-${{ github.sha }}
           path: |
             mcp-interactive-diagram/dist
-            mcp-interactive-diagram/public/version.json
           retention-days: 90
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './mcp-interactive-diagram/dist'
 
       - name: Deploy to GitHub Pages
         id: deployment
