@@ -1,5 +1,5 @@
 "use client";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import ReactMarkdown from 'react-markdown';
 import ReactFlow, {
   Background,
@@ -130,10 +130,33 @@ export default function MCPInteractiveDiagram() {
   const [nodes, , onNodesChange] = useNodesState(initialNodes);
   const [edges, , onEdgesChange] = useEdgesState(initialEdges);
 
+  // Track hovered node or edge
+  const [hoveredItem, setHoveredItem] = useState<
+    | { type: 'node'; data: any }
+    | { type: 'edge'; data: any }
+    | null
+  >(null);
+
   const onNodeClick = useCallback((_event: any, node: any) => {
     if (node?.data?.url) {
       window.open(node.data.url, "_blank", "noopener noreferrer");
     }
+  }, []);
+
+  // Hover handlers for nodes
+  const onNodeMouseEnter = useCallback((_event: any, node: any) => {
+    setHoveredItem({ type: 'node', data: node });
+  }, []);
+  const onNodeMouseLeave = useCallback(() => {
+    setHoveredItem(null);
+  }, []);
+
+  // Hover handlers for edges
+  const onEdgeMouseEnter = useCallback((_event: any, edge: any) => {
+    setHoveredItem({ type: 'edge', data: edge });
+  }, []);
+  const onEdgeMouseLeave = useCallback(() => {
+    setHoveredItem(null);
   }, []);
 
   const markdown = `
@@ -172,7 +195,34 @@ This interactive diagram visualizes Anthropic's Model Context Protocol (MCP):
           zIndex: 10,
         }}
       >
-        <ReactMarkdown>{markdown}</ReactMarkdown>
+        {hoveredItem ? (
+          hoveredItem.type === 'node' ? (
+            <div>
+              <h2 style={{ marginTop: 0 }}>{hoveredItem.data.data?.label || hoveredItem.data.id}</h2>
+              {hoveredItem.data.data?.url && (
+                <div style={{ marginBottom: 8 }}>
+                  <a href={hoveredItem.data.data.url} target="_blank" rel="noopener noreferrer">
+                    {hoveredItem.data.data.url}
+                  </a>
+                </div>
+              )}
+              <pre style={{ background: '#f3f4f6', padding: 8, borderRadius: 8, fontSize: 15 }}>
+                {JSON.stringify(hoveredItem.data, null, 2)}
+              </pre>
+            </div>
+          ) : (
+            <div>
+              <h2 style={{ marginTop: 0 }}>Edge: {hoveredItem.data.id}</h2>
+              <div>From: <b>{hoveredItem.data.source}</b> → To: <b>{hoveredItem.data.target}</b></div>
+              {hoveredItem.data.label && <div style={{ margin: '6px 0' }}>Label: <b>{hoveredItem.data.label}</b></div>}
+              <pre style={{ background: '#f3f4f6', padding: 8, borderRadius: 8, fontSize: 15 }}>
+                {JSON.stringify(hoveredItem.data, null, 2)}
+              </pre>
+            </div>
+          )
+        ) : (
+          <ReactMarkdown>{markdown}</ReactMarkdown>
+        )}
       </div>
       {/* Diagram Area */}
       <div style={{ flex: 1, height: '100%' }}>
@@ -182,6 +232,10 @@ This interactive diagram visualizes Anthropic's Model Context Protocol (MCP):
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           onNodeClick={onNodeClick}
+          onNodeMouseEnter={onNodeMouseEnter}
+          onNodeMouseLeave={onNodeMouseLeave}
+          onEdgeMouseEnter={onEdgeMouseEnter}
+          onEdgeMouseLeave={onEdgeMouseLeave}
           fitView
         >
           <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
