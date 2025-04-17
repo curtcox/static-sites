@@ -2,6 +2,6 @@ import { defineConfig } from "vite";
 // ...
 
 export default defineConfig({
-  base: "/mcp-interactive-diagram/",
+  base: "/static-sites/",
   // existing config …
 });
