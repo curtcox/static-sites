@@ -1,7 +1,6 @@
 "use client";
 import React, { useCallback, useState, useRef } from "react";
 import ColoredNode from "./ColoredNode";
-import { functionColors } from "./functionColors";
 import './ResizableSidebar.css';
 import ReactMarkdown from 'react-markdown';
 import ReactFlow, {
