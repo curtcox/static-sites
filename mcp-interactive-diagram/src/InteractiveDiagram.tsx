@@ -13,22 +13,6 @@ import ReactFlow, {
 } from "reactflow";
 import "reactflow/dist/style.css";
 
-
-/**
- * Interactive diagram of Anthropic's Model Context Protocol (MCP).
- * ---------------------------------------------------------------
- * ▸ Click any node to open relevant external documentation in a new tab.
- * ▸ Drag nodes to rearrange and explore relationships.
- * ▸ Use the Controls (top‑right) to zoom / fit view, and toggle minimap.
- *
- * External references used for clickable links:
- *  - Anthropic Messages API 👉 https://docs.anthropic.com/claude/reference/messages_post
- *  - Model Context Protocol spec 👉 https://docs.anthropic.com/claude/docs/model-context-protocol
- *  - Tool Use & Function Calling 👉 https://docs.anthropic.com/claude/docs/tool-use
- *  - Attachments & Images 👉 https://docs.anthropic.com/claude/docs/images
- *  - Safety & Moderation 👉 https://docs.anthropic.com/claude/docs/safety-overview
- */
-
 import { initialNodes, initialEdges } from "./diagramData";
 const nodeTypes = { colored: ColoredNode };
 
@@ -102,10 +86,6 @@ export default function MCPInteractiveDiagram() {
     window.addEventListener('mouseup', onMouseUp);
   };
 
-
-  // Make edge lines thicker
-  // Remove defaultEdgeOptions (now handled per-edge)
-  // const defaultEdgeOptions = { style: { strokeWidth: 4 } };
 
   return (
     <div style={{ width: '100vw', height: '100vh', display: 'flex', boxShadow: '0 4px 24px rgba(0,0,0,0.08)' }}>
