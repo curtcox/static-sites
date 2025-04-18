@@ -13,12 +13,25 @@ import ReactFlow, {
 } from "reactflow";
 import "reactflow/dist/style.css";
 
-import { initialNodes, initialEdges } from "./diagramData";
+import {
+  initialNodesData,
+  initialEdges,
+  defaultNodeType,
+  defaultNodeStyle,
+} from "./diagramData";
+
 const nodeTypes = { colored: ColoredNode };
+
+// Apply default properties to nodes
+const processedNodes = initialNodesData.map(node => ({
+  ...node,
+  type: defaultNodeType,
+  style: defaultNodeStyle,
+}));
 
 export default function MCPInteractiveDiagram() {
   // State & Callbacks
-  const [nodes, , onNodesChange] = useNodesState(initialNodes);
+  const [nodes, , onNodesChange] = useNodesState(processedNodes);
   const [edges, , onEdgesChange] = useEdgesState(initialEdges);
   // Track hovered node or edge
   const [hoveredItem, setHoveredItem] = useState<

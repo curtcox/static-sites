@@ -3,10 +3,12 @@
 
 import { functionColors } from "./functionColors";
 
-export const initialNodes = [
+export const defaultNodeType = 'colored';
+export const defaultNodeStyle = { padding: 12, borderRadius: 16, color: '#fff' };
+
+export const initialNodesData = [
   {
     id: "client",
-    type: 'colored',
     position: { x: -500, y: 0 },
     data: {
       label: "🖥️\nClient App",
@@ -15,11 +17,9 @@ export const initialNodes = [
       function: 'input',
       color: functionColors.input,
     },
-    style: { padding: 12, borderRadius: 16, color: '#fff' },
   },
   {
     id: "attachments",
-    type: 'colored',
     position: { x: -500, y: 150 },
     data: {
       label: "📎\nAttachments & Images",
@@ -28,11 +28,9 @@ export const initialNodes = [
       function: 'input',
       color: functionColors.input,
     },
-    style: { padding: 12, borderRadius: 16, color: '#fff' },
   },
   {
     id: "sdk_packager",
-    type: 'colored',
     position: { x: -200, y: 0 },
     data: {
       label: "📦\nSDK MCP Packager",
@@ -41,11 +39,9 @@ export const initialNodes = [
       function: 'processing',
       color: functionColors.processing,
     },
-    style: { padding: 12, borderRadius: 16, color: '#fff' },
   },
   {
     id: "api_gateway",
-    type: 'colored',
     position: { x: 100, y: 0 },
     data: {
       label: "🌐\nAnthropic API Gateway",
@@ -54,11 +50,9 @@ export const initialNodes = [
       function: 'processing',
       color: functionColors.processing,
     },
-    style: { padding: 12, borderRadius: 16, color: '#fff' },
   },
   {
     id: "moderation",
-    type: 'colored',
     position: { x: 350, y: -100 },
     data: {
       label: "🛡️\nModeration",
@@ -67,11 +61,9 @@ export const initialNodes = [
       function: 'moderation',
       color: functionColors.moderation,
     },
-    style: { padding: 12, borderRadius: 16, color: '#fff' },
   },
   {
     id: "model",
-    type: 'colored',
     position: { x: 600, y: 0 },
     data: {
       label: "🤖\nClaude Model",
@@ -80,11 +72,9 @@ export const initialNodes = [
       function: 'processing',
       color: functionColors.processing,
     },
-    style: { padding: 12, borderRadius: 16, color: '#fff' },
   },
   {
     id: "tools",
-    type: 'colored',
     position: { x: 850, y: 0 },
     data: {
       label: "🛠️\nTools",
@@ -93,11 +83,9 @@ export const initialNodes = [
       function: 'tool',
       color: functionColors.tool,
     },
-    style: { padding: 12, borderRadius: 16, color: '#fff' },
   },
   {
     id: "streaming",
-    type: 'colored',
     position: { x: 350, y: 150 },
     data: {
       label: "🔄\nStreaming",
@@ -106,11 +94,9 @@ export const initialNodes = [
       function: 'stream',
       color: functionColors.stream,
     },
-    style: { padding: 12, borderRadius: 16, color: '#fff' },
   },
   {
     id: "client_ui",
-    type: 'colored',
     position: { x: -200, y: 250 },
     data: {
       label: "🖥️\nClient UI",
@@ -119,7 +105,6 @@ export const initialNodes = [
       function: 'output',
       color: functionColors.output,
     },
-    style: { padding: 12, borderRadius: 16, color: '#fff' },
   },
 ];
 
