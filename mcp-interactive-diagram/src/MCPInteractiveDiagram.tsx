@@ -1,5 +1,6 @@
 "use client";
 import React, { useCallback, useState, useRef } from "react";
+import ColoredNode from "./ColoredNode";
 import './ResizableSidebar.css';
 import ReactMarkdown from 'react-markdown';
 import ReactFlow, {
@@ -38,112 +39,127 @@ const functionColors: Record<string, string> = {
  *  - Safety & Moderation 👉 https://docs.anthropic.com/claude/docs/safety-overview
  */
 
+const nodeTypes = { colored: ColoredNode };
+
 export default function MCPInteractiveDiagram() {
   /* ----------------- Nodes ----------------- */
   const initialNodes = [
     {
       id: "client",
+      type: 'colored',
       position: { x: -500, y: 0 },
       data: {
         label: "🖥️ Client App",
         url: "https://docs.anthropic.com/claude/reference/messages_post",
         markdown: `**Client App**\n\nThis node represents the application that sends requests to Anthropic's API.`,
+        function: 'input',
+        color: functionColors.input,
       },
-      style: { padding: 12, borderRadius: 16 },
+      style: { padding: 12, borderRadius: 16, color: '#fff' },
     },
     {
       id: "attachments",
-      function: 'input',
-      color: functionColors.input,
+      type: 'colored',
       position: { x: -500, y: 150 },
       data: {
         label: "📎 Attachments & Images",
         url: "https://docs.anthropic.com/claude/docs/images",
         markdown: `**Attachments & Images**\n\nThis node handles file and image attachments sent with requests.`,
+        function: 'input',
+        color: functionColors.input,
       },
-      style: { padding: 12, borderRadius: 16 },
+      style: { padding: 12, borderRadius: 16, color: '#fff' },
     },
     {
       id: "sdk_packager",
+      type: 'colored',
       position: { x: -200, y: 0 },
       data: {
         label: "📦 SDK MCP Packager",
         url: "https://docs.anthropic.com/claude/docs/model-context-protocol",
         markdown: `**SDK MCP Packager**\n\nPackages client data and attachments into MCP-compliant requests.`,
+        function: 'processing',
+        color: functionColors.processing,
       },
-      style: { padding: 12, borderRadius: 16 },
+      style: { padding: 12, borderRadius: 16, color: '#fff' },
     },
     {
       id: "api_gateway",
-      function: 'processing',
-      color: functionColors.processing,
+      type: 'colored',
       position: { x: 100, y: 0 },
       data: {
         label: "🌐 Anthropic API Gateway",
         url: "https://docs.anthropic.com/claude/reference/messages_post",
         markdown: `**Anthropic API Gateway**\n\nReceives requests, manages authentication, and routes to moderation/model.`,
+        function: 'processing',
+        color: functionColors.processing,
       },
-      style: { padding: 12, borderRadius: 16 },
+      style: { padding: 12, borderRadius: 16, color: '#fff' },
     },
     {
       id: "moderation",
-      function: 'moderation',
-      color: functionColors.moderation,
+      type: 'colored',
       position: { x: 350, y: -100 },
       data: {
         label: "🛡️ Moderation & Safety",
         url: "https://docs.anthropic.com/claude/docs/safety-overview",
         markdown: `**Moderation & Safety**\n\nChecks requests for safety and content policy compliance.`,
+        function: 'moderation',
+        color: functionColors.moderation,
       },
-      style: { padding: 12, borderRadius: 16 },
+      style: { padding: 12, borderRadius: 16, color: '#fff' },
     },
     {
       id: "model",
-      function: 'processing',
-      color: functionColors.processing,
+      type: 'colored',
       position: { x: 350, y: 100 },
       data: {
         label: "🧠 Claude Model Inference",
         url: "https://docs.anthropic.com/claude/docs/model-context-protocol",
         markdown: `**Claude Model Inference**\n\nProcesses requests and generates responses using Anthropic's Claude model.`,
+        function: 'processing',
+        color: functionColors.processing,
       },
-      style: { padding: 12, borderRadius: 16 },
+      style: { padding: 12, borderRadius: 16, color: '#fff' },
     },
     {
       id: "tools",
-      function: 'tool',
-      color: functionColors.tool,
+      type: 'colored',
       position: { x: 600, y: 100 },
       data: {
         label: "🔧 Tool Handler",
         url: "https://docs.anthropic.com/claude/docs/tool-use",
         markdown: `**Tool Handler**\n\nExecutes tool calls and returns results to the model.`,
+        function: 'tool',
+        color: functionColors.tool,
       },
-      style: { padding: 12, borderRadius: 16 },
+      style: { padding: 12, borderRadius: 16, color: '#fff' },
     },
     {
       id: "streaming",
-      function: 'stream',
-      color: functionColors.stream,
+      type: 'colored',
       position: { x: 850, y: 0 },
       data: {
         label: "📡 Streaming Response",
-        url: "https://docs.anthropic.com/claude/reference/messages_post",
+        url: "https://docs.anthropic.com/claude/docs/streaming",
         markdown: `**Streaming Response**\n\nStreams partial responses for real-time UI updates.`,
+        function: 'stream',
+        color: functionColors.stream,
       },
-      style: { padding: 12, borderRadius: 16 },
+      style: { padding: 12, borderRadius: 16, color: '#fff' },
     },
     {
       id: "client_ui",
-      function: 'output',
-      color: functionColors.output,
+      type: 'colored',
       position: { x: 1100, y: 0 },
       data: {
         label: "🖥️ Client UI Updated",
-        url: "https://docs.anthropic.com/claude/reference/messages_post",
+        url: "https://docs.anthropic.com/claude/docs/ui",
         markdown: `**Client UI Updated**\n\nDisplays the streamed results to the end user.`,
+        function: 'output',
+        color: functionColors.output,
       },
-      style: { padding: 12, borderRadius: 16 },
+      style: { padding: 12, borderRadius: 16, color: '#fff' },
     },
   ];
 
@@ -301,6 +317,7 @@ This interactive diagram visualizes Anthropic's Model Context Protocol (MCP):
       <ReactFlow
         nodes={nodes}
         edges={edges}
+        nodeTypes={nodeTypes}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onNodeClick={onNodeClick}
