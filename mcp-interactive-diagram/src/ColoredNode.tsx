@@ -56,7 +56,7 @@ export default function ColoredNode(props: NodeProps) {
           justifyContent: 'center',
           pointerEvents: 'none',
           fontWeight: 500,
-          fontSize: 15,
+          fontSize: 21, // Increased by 40% from 15
           color: style.color || '#fff',
           textAlign: 'center',
           wordBreak: 'break-word',

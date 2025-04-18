@@ -49,7 +49,7 @@ export default function MCPInteractiveDiagram() {
       type: 'colored',
       position: { x: -500, y: 0 },
       data: {
-        label: "🖥️ Client App",
+        label: "🖥️\nClient App",
         url: "https://docs.anthropic.com/claude/reference/messages_post",
         markdown: `**Client App**\n\nThis node represents the application that sends requests to Anthropic's API.`,
         function: 'input',
@@ -62,7 +62,7 @@ export default function MCPInteractiveDiagram() {
       type: 'colored',
       position: { x: -500, y: 150 },
       data: {
-        label: "📎 Attachments & Images",
+        label: "📎\nAttachments & Images",
         url: "https://docs.anthropic.com/claude/docs/images",
         markdown: `**Attachments & Images**\n\nThis node handles file and image attachments sent with requests.`,
         function: 'input',
@@ -75,7 +75,7 @@ export default function MCPInteractiveDiagram() {
       type: 'colored',
       position: { x: -200, y: 0 },
       data: {
-        label: "📦 SDK MCP Packager",
+        label: "📦\nSDK MCP Packager",
         url: "https://docs.anthropic.com/claude/docs/model-context-protocol",
         markdown: `**SDK MCP Packager**\n\nPackages client data and attachments into MCP-compliant requests.`,
         function: 'processing',
@@ -88,7 +88,7 @@ export default function MCPInteractiveDiagram() {
       type: 'colored',
       position: { x: 100, y: 0 },
       data: {
-        label: "🌐 Anthropic API Gateway",
+        label: "🌐\nAnthropic API Gateway",
         url: "https://docs.anthropic.com/claude/reference/messages_post",
         markdown: `**Anthropic API Gateway**\n\nReceives requests, manages authentication, and routes to moderation/model.`,
         function: 'processing',
@@ -101,7 +101,7 @@ export default function MCPInteractiveDiagram() {
       type: 'colored',
       position: { x: 350, y: -100 },
       data: {
-        label: "🛡️ Moderation & Safety",
+        label: "🛡️\nModeration & Safety",
         url: "https://docs.anthropic.com/claude/docs/safety-overview",
         markdown: `**Moderation & Safety**\n\nChecks requests for safety and content policy compliance.`,
         function: 'moderation',
@@ -114,7 +114,7 @@ export default function MCPInteractiveDiagram() {
       type: 'colored',
       position: { x: 350, y: 100 },
       data: {
-        label: "🧠 Claude Model Inference",
+        label: "🧠\nClaude Model Inference",
         url: "https://docs.anthropic.com/claude/docs/model-context-protocol",
         markdown: `**Claude Model Inference**\n\nProcesses requests and generates responses using Anthropic's Claude model.`,
         function: 'processing',
@@ -127,7 +127,7 @@ export default function MCPInteractiveDiagram() {
       type: 'colored',
       position: { x: 600, y: 100 },
       data: {
-        label: "🔧 Tool Handler",
+        label: "🔧\nTool Handler",
         url: "https://docs.anthropic.com/claude/docs/tool-use",
         markdown: `**Tool Handler**\n\nExecutes tool calls and returns results to the model.`,
         function: 'tool',
@@ -140,7 +140,7 @@ export default function MCPInteractiveDiagram() {
       type: 'colored',
       position: { x: 850, y: 0 },
       data: {
-        label: "📡 Streaming Response",
+        label: "📡\nStreaming Response",
         url: "https://docs.anthropic.com/claude/docs/streaming",
         markdown: `**Streaming Response**\n\nStreams partial responses for real-time UI updates.`,
         function: 'stream',
@@ -153,7 +153,7 @@ export default function MCPInteractiveDiagram() {
       type: 'colored',
       position: { x: 1100, y: 0 },
       data: {
-        label: "🖥️ Client UI Updated",
+        label: "🖥️\nClient UI Updated",
         url: "https://docs.anthropic.com/claude/docs/ui",
         markdown: `**Client UI Updated**\n\nDisplays the streamed results to the end user.`,
         function: 'output',
@@ -165,16 +165,16 @@ export default function MCPInteractiveDiagram() {
 
   /* ----------------- Edges ----------------- */
   const initialEdges = [
-    { id: "c_pkg", source: "client", target: "sdk_packager", label: "request", function: 'processing', style: { stroke: functionColors.processing, strokeWidth: 4 }, markdown: `**Request**\n\nThe client sends a request to the SDK MCP Packager.` },
-    { id: "att_pkg", source: "attachments", target: "sdk_packager", label: "embed", function: 'processing', style: { stroke: functionColors.processing, strokeWidth: 4 }, markdown: `**Embed**\n\nAttachments are embedded into the MCP package.` },
-    { id: "pkg_api", source: "sdk_packager", target: "api_gateway", label: "MCP JSON", function: 'processing', style: { stroke: functionColors.processing, strokeWidth: 4 }, markdown: `**MCP JSON**\n\nPackaged request is sent to the API Gateway as MCP JSON.` },
-    { id: "api_mod", source: "api_gateway", target: "moderation", label: "safety check", function: 'moderation', style: { stroke: functionColors.moderation, strokeWidth: 4 }, markdown: `**Safety Check**\n\nAPI Gateway forwards the request to Moderation for safety checks.` },
-    { id: "mod_model", source: "moderation", target: "model", label: "allowed", function: 'moderation', style: { stroke: functionColors.moderation, strokeWidth: 4 }, markdown: `**Allowed**\n\nIf safe, the request is sent to the Claude Model.` },
-    { id: "model_tools", source: "model", target: "tools", label: "tool call", function: 'tool', style: { stroke: functionColors.tool, strokeWidth: 4 }, markdown: `**Tool Call**\n\nThe model calls tools as needed to fulfill the request.` },
-    { id: "tools_model", source: "tools", target: "model", label: "tool result", function: 'tool', style: { stroke: functionColors.tool, strokeWidth: 4 }, markdown: `**Tool Result**\n\nResults from tools are returned to the model.` },
-    { id: "model_api", source: "model", target: "api_gateway", label: "completion", function: 'processing', style: { stroke: functionColors.processing, strokeWidth: 4 }, markdown: `**Completion**\n\nThe model sends the completed response to the API Gateway.` },
-    { id: "api_stream", source: "api_gateway", target: "streaming", label: "chunks", function: 'stream', style: { stroke: functionColors.stream, strokeWidth: 4 }, markdown: `**Chunks**\n\nAPI Gateway streams response chunks to the Streaming node.` },
-    { id: "stream_client", source: "streaming", target: "client_ui", label: "render", function: 'output', style: { stroke: functionColors.output, strokeWidth: 4 }, markdown: `**Render**\n\nStreaming node sends rendered output to the client UI.` },
+    { id: "c_pkg", source: "client", target: "sdk_packager", label: "request", function: 'processing', style: { stroke: functionColors.processing, strokeWidth: 4 }, labelStyle: { fontSize: 24 }, markdown: `**Request**\n\nThe client sends a request to the SDK MCP Packager.` },
+    { id: "att_pkg", source: "attachments", target: "sdk_packager", label: "embed", function: 'processing', style: { stroke: functionColors.processing, strokeWidth: 4 }, labelStyle: { fontSize: 24 }, markdown: `**Embed**\n\nAttachments are embedded into the MCP package.` },
+    { id: "pkg_api", source: "sdk_packager", target: "api_gateway", label: "MCP JSON", function: 'processing', style: { stroke: functionColors.processing, strokeWidth: 4 }, labelStyle: { fontSize: 24 }, markdown: `**MCP JSON**\n\nPackaged request is sent to the API Gateway as MCP JSON.` },
+    { id: "api_mod", source: "api_gateway", target: "moderation", label: "safety check", function: 'moderation', style: { stroke: functionColors.moderation, strokeWidth: 4 }, labelStyle: { fontSize: 24 }, markdown: `**Safety Check**\n\nAPI Gateway forwards the request to Moderation for safety checks.` },
+    { id: "mod_model", source: "moderation", target: "model", label: "allowed", function: 'moderation', style: { stroke: functionColors.moderation, strokeWidth: 4 }, labelStyle: { fontSize: 24 }, markdown: `**Allowed**\n\nIf safe, the request is sent to the Claude Model.` },
+    { id: "model_tools", source: "model", target: "tools", label: "tool call", function: 'tool', style: { stroke: functionColors.tool, strokeWidth: 4 }, labelStyle: { fontSize: 24 }, markdown: `**Tool Call**\n\nThe model calls tools as needed to fulfill the request.` },
+    { id: "tools_model", source: "tools", target: "model", label: "tool result", function: 'tool', style: { stroke: functionColors.tool, strokeWidth: 4 }, labelStyle: { fontSize: 24 }, markdown: `**Tool Result**\n\nResults from tools are returned to the model.` },
+    { id: "model_api", source: "model", target: "api_gateway", label: "completion", function: 'processing', style: { stroke: functionColors.processing, strokeWidth: 4 }, labelStyle: { fontSize: 24 }, markdown: `**Completion**\n\nThe model sends the completed response to the API Gateway.` },
+    { id: "api_stream", source: "api_gateway", target: "streaming", label: "chunks", function: 'stream', style: { stroke: functionColors.stream, strokeWidth: 4 }, labelStyle: { fontSize: 24 }, markdown: `**Chunks**\n\nAPI Gateway streams response chunks to the Streaming node.` },
+    { id: "stream_client", source: "streaming", target: "client_ui", label: "render", function: 'output', style: { stroke: functionColors.output, strokeWidth: 4 }, labelStyle: { fontSize: 24 }, markdown: `**Render**\n\nStreaming node sends rendered output to the client UI.` },
 
   ];
 
@@ -284,9 +284,6 @@ This interactive diagram visualizes Anthropic's Model Context Protocol (MCP):
                     <ReactMarkdown>{hoveredItem.data.data.markdown}</ReactMarkdown>
                   </div>
                 )}
-                <pre style={{ background: '#f3f4f6', padding: 8, borderRadius: 8, fontSize: 15 }}>
-                  {JSON.stringify(hoveredItem.data, null, 2)}
-                </pre>
               </div>
             ) : (
               <div>
@@ -298,9 +295,6 @@ This interactive diagram visualizes Anthropic's Model Context Protocol (MCP):
                     <ReactMarkdown>{hoveredItem.data.markdown}</ReactMarkdown>
                   </div>
                 )}
-                <pre style={{ background: '#f3f4f6', padding: 8, borderRadius: 8, fontSize: 15 }}>
-                  {JSON.stringify(hoveredItem.data, null, 2)}
-                </pre>
               </div>
             )
           ) : (
