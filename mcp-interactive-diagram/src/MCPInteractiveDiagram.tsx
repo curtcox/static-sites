@@ -12,6 +12,17 @@ import ReactFlow, {
 } from "reactflow";
 import "reactflow/dist/style.css";
 
+// Function type to color mapping
+const functionColors: Record<string, string> = {
+  input: '#3b82f6',        // blue
+  processing: '#6366f1',   // indigo
+  moderation: '#f59e42',   // orange
+  tool: '#10b981',         // green
+  stream: '#06b6d4',       // cyan
+  output: '#a21caf',       // purple
+  edge: '#64748b',         // slate/gray (fallback)
+};
+
 /**
  * Interactive diagram of Anthropic's Model Context Protocol (MCP).
  * ---------------------------------------------------------------
@@ -42,6 +53,8 @@ export default function MCPInteractiveDiagram() {
     },
     {
       id: "attachments",
+      function: 'input',
+      color: functionColors.input,
       position: { x: -500, y: 150 },
       data: {
         label: "📎 Attachments & Images",
@@ -62,6 +75,8 @@ export default function MCPInteractiveDiagram() {
     },
     {
       id: "api_gateway",
+      function: 'processing',
+      color: functionColors.processing,
       position: { x: 100, y: 0 },
       data: {
         label: "🌐 Anthropic API Gateway",
@@ -72,6 +87,8 @@ export default function MCPInteractiveDiagram() {
     },
     {
       id: "moderation",
+      function: 'moderation',
+      color: functionColors.moderation,
       position: { x: 350, y: -100 },
       data: {
         label: "🛡️ Moderation & Safety",
@@ -82,6 +99,8 @@ export default function MCPInteractiveDiagram() {
     },
     {
       id: "model",
+      function: 'processing',
+      color: functionColors.processing,
       position: { x: 350, y: 100 },
       data: {
         label: "🧠 Claude Model Inference",
@@ -92,6 +111,8 @@ export default function MCPInteractiveDiagram() {
     },
     {
       id: "tools",
+      function: 'tool',
+      color: functionColors.tool,
       position: { x: 600, y: 100 },
       data: {
         label: "🔧 Tool Handler",
@@ -102,6 +123,8 @@ export default function MCPInteractiveDiagram() {
     },
     {
       id: "streaming",
+      function: 'stream',
+      color: functionColors.stream,
       position: { x: 850, y: 0 },
       data: {
         label: "📡 Streaming Response",
@@ -112,6 +135,8 @@ export default function MCPInteractiveDiagram() {
     },
     {
       id: "client_ui",
+      function: 'output',
+      color: functionColors.output,
       position: { x: 1100, y: 0 },
       data: {
         label: "🖥️ Client UI Updated",
@@ -124,16 +149,17 @@ export default function MCPInteractiveDiagram() {
 
   /* ----------------- Edges ----------------- */
   const initialEdges = [
-    { id: "c_pkg", source: "client", target: "sdk_packager", label: "request", markdown: `**Request**\n\nThe client sends a request to the SDK MCP Packager.` },
-    { id: "att_pkg", source: "attachments", target: "sdk_packager", label: "embed", markdown: `**Embed**\n\nAttachments are embedded into the MCP package.` },
-    { id: "pkg_api", source: "sdk_packager", target: "api_gateway", label: "MCP JSON", markdown: `**MCP JSON**\n\nPackaged request is sent to the API Gateway as MCP JSON.` },
-    { id: "api_mod", source: "api_gateway", target: "moderation", label: "safety check", markdown: `**Safety Check**\n\nAPI Gateway forwards the request to Moderation for safety checks.` },
-    { id: "mod_model", source: "moderation", target: "model", label: "allowed", markdown: `**Allowed**\n\nIf safe, the request is sent to the Claude Model.` },
-    { id: "model_tools", source: "model", target: "tools", label: "tool call", markdown: `**Tool Call**\n\nThe model calls tools as needed to fulfill the request.` },
-    { id: "tools_model", source: "tools", target: "model", label: "tool result", markdown: `**Tool Result**\n\nResults from tools are returned to the model.` },
-    { id: "model_api", source: "model", target: "api_gateway", label: "completion", markdown: `**Completion**\n\nThe model sends the completed response to the API Gateway.` },
-    { id: "api_stream", source: "api_gateway", target: "streaming", label: "chunks", markdown: `**Chunks**\n\nAPI Gateway streams response chunks to the Streaming node.` },
-    { id: "stream_client", source: "streaming", target: "client_ui", label: "render", markdown: `**Render**\n\nStreaming node sends rendered output to the client UI.` },
+    { id: "c_pkg", source: "client", target: "sdk_packager", label: "request", function: 'processing', style: { stroke: functionColors.processing, strokeWidth: 4 }, markdown: `**Request**\n\nThe client sends a request to the SDK MCP Packager.` },
+    { id: "att_pkg", source: "attachments", target: "sdk_packager", label: "embed", function: 'processing', style: { stroke: functionColors.processing, strokeWidth: 4 }, markdown: `**Embed**\n\nAttachments are embedded into the MCP package.` },
+    { id: "pkg_api", source: "sdk_packager", target: "api_gateway", label: "MCP JSON", function: 'processing', style: { stroke: functionColors.processing, strokeWidth: 4 }, markdown: `**MCP JSON**\n\nPackaged request is sent to the API Gateway as MCP JSON.` },
+    { id: "api_mod", source: "api_gateway", target: "moderation", label: "safety check", function: 'moderation', style: { stroke: functionColors.moderation, strokeWidth: 4 }, markdown: `**Safety Check**\n\nAPI Gateway forwards the request to Moderation for safety checks.` },
+    { id: "mod_model", source: "moderation", target: "model", label: "allowed", function: 'moderation', style: { stroke: functionColors.moderation, strokeWidth: 4 }, markdown: `**Allowed**\n\nIf safe, the request is sent to the Claude Model.` },
+    { id: "model_tools", source: "model", target: "tools", label: "tool call", function: 'tool', style: { stroke: functionColors.tool, strokeWidth: 4 }, markdown: `**Tool Call**\n\nThe model calls tools as needed to fulfill the request.` },
+    { id: "tools_model", source: "tools", target: "model", label: "tool result", function: 'tool', style: { stroke: functionColors.tool, strokeWidth: 4 }, markdown: `**Tool Result**\n\nResults from tools are returned to the model.` },
+    { id: "model_api", source: "model", target: "api_gateway", label: "completion", function: 'processing', style: { stroke: functionColors.processing, strokeWidth: 4 }, markdown: `**Completion**\n\nThe model sends the completed response to the API Gateway.` },
+    { id: "api_stream", source: "api_gateway", target: "streaming", label: "chunks", function: 'stream', style: { stroke: functionColors.stream, strokeWidth: 4 }, markdown: `**Chunks**\n\nAPI Gateway streams response chunks to the Streaming node.` },
+    { id: "stream_client", source: "streaming", target: "client_ui", label: "render", function: 'output', style: { stroke: functionColors.output, strokeWidth: 4 }, markdown: `**Render**\n\nStreaming node sends rendered output to the client UI.` },
+
   ];
 
   /* ----------------- State & Callbacks ----------------- */
@@ -218,7 +244,8 @@ This interactive diagram visualizes Anthropic's Model Context Protocol (MCP):
 
 
   // Make edge lines thicker
-  const defaultEdgeOptions = { style: { strokeWidth: 4 } };
+  // Remove defaultEdgeOptions (now handled per-edge)
+  // const defaultEdgeOptions = { style: { strokeWidth: 4 } };
 
   return (
     <div style={{ width: '100vw', height: '100vh', display: 'flex', boxShadow: '0 4px 24px rgba(0,0,0,0.08)' }}>
@@ -267,29 +294,27 @@ This interactive diagram visualizes Anthropic's Model Context Protocol (MCP):
         <div
           className="resizer"
           onMouseDown={onMouseDown}
-          style={{ height: '100%' }}
         />
       </div>
-      {/* Diagram Area */}
-      <div style={{ flex: 1, height: '100%' }}>
-        <ReactFlow
-          nodes={nodes}
-          edges={edges}
-          onNodesChange={onNodesChange}
-          onEdgesChange={onEdgesChange}
-          onNodeClick={onNodeClick}
-          onNodeMouseEnter={onNodeMouseEnter}
-          onNodeMouseLeave={onNodeMouseLeave}
-          onEdgeMouseEnter={onEdgeMouseEnter}
-          onEdgeMouseLeave={onEdgeMouseLeave}
-          fitView
-          defaultEdgeOptions={defaultEdgeOptions}
-        >
-          <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
-          <MiniMap pannable zoomable />
-          <Controls />
-        </ReactFlow>
-      </div>
+    {/* Diagram Area */}
+    <div style={{ flex: 1, height: '100%' }}>
+      <ReactFlow
+        nodes={nodes}
+        edges={edges}
+        onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
+        onNodeClick={onNodeClick}
+        onNodeMouseEnter={onNodeMouseEnter}
+        onNodeMouseLeave={onNodeMouseLeave}
+        onEdgeMouseEnter={onEdgeMouseEnter}
+        onEdgeMouseLeave={onEdgeMouseLeave}
+        fitView
+      >
+        <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
+        <MiniMap pannable zoomable />
+        <Controls />
+      </ReactFlow>
     </div>
-  );
+  </div>
+);
 }
