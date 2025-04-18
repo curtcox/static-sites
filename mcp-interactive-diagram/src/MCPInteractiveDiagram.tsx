@@ -36,6 +36,7 @@ export default function MCPInteractiveDiagram() {
       data: {
         label: "🖥️ Client App",
         url: "https://docs.anthropic.com/claude/reference/messages_post",
+        markdown: `**Client App**\n\nThis node represents the application that sends requests to Anthropic's API.`,
       },
       style: { padding: 12, borderRadius: 16 },
     },
@@ -45,6 +46,7 @@ export default function MCPInteractiveDiagram() {
       data: {
         label: "📎 Attachments & Images",
         url: "https://docs.anthropic.com/claude/docs/images",
+        markdown: `**Attachments & Images**\n\nThis node handles file and image attachments sent with requests.`,
       },
       style: { padding: 12, borderRadius: 16 },
     },
@@ -54,6 +56,7 @@ export default function MCPInteractiveDiagram() {
       data: {
         label: "📦 SDK MCP Packager",
         url: "https://docs.anthropic.com/claude/docs/model-context-protocol",
+        markdown: `**SDK MCP Packager**\n\nPackages client data and attachments into MCP-compliant requests.`,
       },
       style: { padding: 12, borderRadius: 16 },
     },
@@ -63,6 +66,7 @@ export default function MCPInteractiveDiagram() {
       data: {
         label: "🌐 Anthropic API Gateway",
         url: "https://docs.anthropic.com/claude/reference/messages_post",
+        markdown: `**Anthropic API Gateway**\n\nReceives requests, manages authentication, and routes to moderation/model.`,
       },
       style: { padding: 12, borderRadius: 16 },
     },
@@ -72,6 +76,7 @@ export default function MCPInteractiveDiagram() {
       data: {
         label: "🛡️ Moderation & Safety",
         url: "https://docs.anthropic.com/claude/docs/safety-overview",
+        markdown: `**Moderation & Safety**\n\nChecks requests for safety and content policy compliance.`,
       },
       style: { padding: 12, borderRadius: 16 },
     },
@@ -81,6 +86,7 @@ export default function MCPInteractiveDiagram() {
       data: {
         label: "🧠 Claude Model Inference",
         url: "https://docs.anthropic.com/claude/docs/model-context-protocol",
+        markdown: `**Claude Model Inference**\n\nProcesses requests and generates responses using Anthropic's Claude model.`,
       },
       style: { padding: 12, borderRadius: 16 },
     },
@@ -90,6 +96,7 @@ export default function MCPInteractiveDiagram() {
       data: {
         label: "🔧 Tool Handler",
         url: "https://docs.anthropic.com/claude/docs/tool-use",
+        markdown: `**Tool Handler**\n\nExecutes tool calls and returns results to the model.`,
       },
       style: { padding: 12, borderRadius: 16 },
     },
@@ -99,6 +106,7 @@ export default function MCPInteractiveDiagram() {
       data: {
         label: "📡 Streaming Response",
         url: "https://docs.anthropic.com/claude/reference/messages_post",
+        markdown: `**Streaming Response**\n\nStreams partial responses for real-time UI updates.`,
       },
       style: { padding: 12, borderRadius: 16 },
     },
@@ -108,6 +116,7 @@ export default function MCPInteractiveDiagram() {
       data: {
         label: "🖥️ Client UI Updated",
         url: "https://docs.anthropic.com/claude/reference/messages_post",
+        markdown: `**Client UI Updated**\n\nDisplays the streamed results to the end user.`,
       },
       style: { padding: 12, borderRadius: 16 },
     },
@@ -115,16 +124,16 @@ export default function MCPInteractiveDiagram() {
 
   /* ----------------- Edges ----------------- */
   const initialEdges = [
-    { id: "c_pkg", source: "client", target: "sdk_packager", label: "request" },
-    { id: "att_pkg", source: "attachments", target: "sdk_packager", label: "embed" },
-    { id: "pkg_api", source: "sdk_packager", target: "api_gateway", label: "MCP JSON" },
-    { id: "api_mod", source: "api_gateway", target: "moderation", label: "safety check" },
-    { id: "mod_model", source: "moderation", target: "model", label: "allowed" },
-    { id: "model_tools", source: "model", target: "tools", label: "tool call" },
-    { id: "tools_model", source: "tools", target: "model", label: "tool result" },
-    { id: "model_api", source: "model", target: "api_gateway", label: "completion" },
-    { id: "api_stream", source: "api_gateway", target: "streaming", label: "chunks" },
-    { id: "stream_client", source: "streaming", target: "client_ui", label: "render" },
+    { id: "c_pkg", source: "client", target: "sdk_packager", label: "request", markdown: `**Request**\n\nThe client sends a request to the SDK MCP Packager.` },
+    { id: "att_pkg", source: "attachments", target: "sdk_packager", label: "embed", markdown: `**Embed**\n\nAttachments are embedded into the MCP package.` },
+    { id: "pkg_api", source: "sdk_packager", target: "api_gateway", label: "MCP JSON", markdown: `**MCP JSON**\n\nPackaged request is sent to the API Gateway as MCP JSON.` },
+    { id: "api_mod", source: "api_gateway", target: "moderation", label: "safety check", markdown: `**Safety Check**\n\nAPI Gateway forwards the request to Moderation for safety checks.` },
+    { id: "mod_model", source: "moderation", target: "model", label: "allowed", markdown: `**Allowed**\n\nIf safe, the request is sent to the Claude Model.` },
+    { id: "model_tools", source: "model", target: "tools", label: "tool call", markdown: `**Tool Call**\n\nThe model calls tools as needed to fulfill the request.` },
+    { id: "tools_model", source: "tools", target: "model", label: "tool result", markdown: `**Tool Result**\n\nResults from tools are returned to the model.` },
+    { id: "model_api", source: "model", target: "api_gateway", label: "completion", markdown: `**Completion**\n\nThe model sends the completed response to the API Gateway.` },
+    { id: "api_stream", source: "api_gateway", target: "streaming", label: "chunks", markdown: `**Chunks**\n\nAPI Gateway streams response chunks to the Streaming node.` },
+    { id: "stream_client", source: "streaming", target: "client_ui", label: "render", markdown: `**Render**\n\nStreaming node sends rendered output to the client UI.` },
   ];
 
   /* ----------------- State & Callbacks ----------------- */
@@ -208,6 +217,9 @@ This interactive diagram visualizes Anthropic's Model Context Protocol (MCP):
   };
 
 
+  // Make edge lines thicker
+  const defaultEdgeOptions = { style: { strokeWidth: 4 } };
+
   return (
     <div style={{ width: '100vw', height: '100vh', display: 'flex', boxShadow: '0 4px 24px rgba(0,0,0,0.08)' }}>
       {/* Resizable Markdown Sidebar */}
@@ -224,6 +236,11 @@ This interactive diagram visualizes Anthropic's Model Context Protocol (MCP):
                     </a>
                   </div>
                 )}
+                {hoveredItem.data.data?.markdown && (
+                  <div style={{ marginBottom: 8 }}>
+                    <ReactMarkdown>{hoveredItem.data.data.markdown}</ReactMarkdown>
+                  </div>
+                )}
                 <pre style={{ background: '#f3f4f6', padding: 8, borderRadius: 8, fontSize: 15 }}>
                   {JSON.stringify(hoveredItem.data, null, 2)}
                 </pre>
@@ -233,6 +250,11 @@ This interactive diagram visualizes Anthropic's Model Context Protocol (MCP):
                 <h2 style={{ marginTop: 0 }}>Edge: {hoveredItem.data.id}</h2>
                 <div>From: <b>{hoveredItem.data.source}</b> → To: <b>{hoveredItem.data.target}</b></div>
                 {hoveredItem.data.label && <div style={{ margin: '6px 0' }}>Label: <b>{hoveredItem.data.label}</b></div>}
+                {hoveredItem.data.markdown && (
+                  <div style={{ marginBottom: 8 }}>
+                    <ReactMarkdown>{hoveredItem.data.markdown}</ReactMarkdown>
+                  </div>
+                )}
                 <pre style={{ background: '#f3f4f6', padding: 8, borderRadius: 8, fontSize: 15 }}>
                   {JSON.stringify(hoveredItem.data, null, 2)}
                 </pre>
@@ -261,6 +283,7 @@ This interactive diagram visualizes Anthropic's Model Context Protocol (MCP):
           onEdgeMouseEnter={onEdgeMouseEnter}
           onEdgeMouseLeave={onEdgeMouseLeave}
           fitView
+          defaultEdgeOptions={defaultEdgeOptions}
         >
           <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
           <MiniMap pannable zoomable />
